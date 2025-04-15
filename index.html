@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biosphere Reserve Map Quiz</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 1rem;
+    }
+    h1 {
+      margin-bottom: 0.5rem;
+    }
+    #question {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .map-container {
+      position: relative;
+      max-width: 100%;
+    }
+    .map-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .click-point {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: rgba(0, 128, 0, 0.4);
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid green;
+    }
+    #feedback {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    @media (max-width: 600px) {
+      #question {
+        font-size: 1rem;
+      }
+      .click-point {
+        width: 15px;
+        height: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Biosphere Reserve Map Quiz</h1>
+  <div id="question">Loading question...</div>
+
+  <div class="map-container">
+    <img src="image.png" alt="India Biosphere Map" class="map-img">
+
+    <!-- Clickable points: position top/left as % -->
+    <div class="click-point" data-name="SUNDARBANS" style="top: 34%; left: 78%;"></div>
+    <div class="click-point" data-name="NANDA DEVI" style="top: 13%; left: 36%;"></div>
+    <div class="click-point" data-name="GREAT NICOBAR" style="top: 86%; left: 84%;"></div>
+    <div class="click-point" data-name="PANCHMARHI" style="top: 50%; left: 52%;"></div>
+    <div class="click-point" data-name="AGASTHYAMALA" style="top: 80%; left: 38%;"></div>
+    <!-- Add more points as needed -->
+  </div>
+
+  <div id="feedback"></div>
+
+  <script>
+    const points = document.querySelectorAll('.click-point');
+    const questionEl = document.getElementById('question');
+    const feedbackEl = document.getElementById('feedback');
+
+    const options = Array.from(points).map(p => p.dataset.name);
+
+    let currentAnswer = '';
+
+    function newQuestion() {
+      currentAnswer = options[Math.floor(Math.random() * options.length)];
+      questionEl.textContent = `Click on “${currentAnswer}”`;
+      feedbackEl.textContent = '';
+    }
+
+    points.forEach(point => {
+      point.addEventListener('click', () => {
+        if (point.dataset.name === currentAnswer) {
+          feedbackEl.textContent = '✅ Correct!';
+          feedbackEl.style.color = 'green';
+          setTimeout(newQuestion, 1000);
+        } else {
+          feedbackEl.textContent = '❌ Try Again';
+          feedbackEl.style.color = 'red';
+        }
+      });
+    });
+
+    newQuestion();
+  </script>
+</body>
+</html>
